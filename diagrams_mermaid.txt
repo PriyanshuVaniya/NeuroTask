@@ -1,0 +1,448 @@
+====================================================
+1. USE CASE DIAGRAM
+====================================================
+
+graph TB
+    subgraph "NeuroTask System"
+        UC1["Login"]
+        UC2["Register"]
+        UC3["Forgot Password"]
+        UC4["View Dashboard"]
+        UC5["Add User"]
+        UC6["Delete User"]
+        UC7["Toggle AI Agents"]
+        UC8["Create Team"]
+        UC9["Delete Team"]
+        UC10["Add Members to Team"]
+        UC11["Remove Members from Team"]
+        UC12["Assign Task"]
+        UC13["Delete Task"]
+        UC14["View Tasks"]
+        UC15["Update Task Status"]
+        UC16["Add Comment on Task"]
+        UC17["View Notifications"]
+        UC18["Search Tasks / Users / Teams"]
+        UC19["View AI Risk Alerts"]
+        UC20["View Team Directory"]
+    end
+
+    Admin(("Admin"))
+    Manager(("Manager"))
+    Employee(("Employee"))
+
+    Admin --- UC1
+    Admin --- UC4
+    Admin --- UC5
+    Admin --- UC6
+    Admin --- UC7
+    Admin --- UC17
+    Admin --- UC18
+
+    Manager --- UC1
+    Manager --- UC2
+    Manager --- UC4
+    Manager --- UC8
+    Manager --- UC9
+    Manager --- UC10
+    Manager --- UC11
+    Manager --- UC12
+    Manager --- UC13
+    Manager --- UC14
+    Manager --- UC17
+    Manager --- UC18
+    Manager --- UC19
+    Manager --- UC20
+
+    Employee --- UC1
+    Employee --- UC2
+    Employee --- UC3
+    Employee --- UC4
+    Employee --- UC14
+    Employee --- UC15
+    Employee --- UC16
+    Employee --- UC17
+    Employee --- UC18
+
+
+====================================================
+2. DFD LEVEL 0 - CONTEXT DIAGRAM
+====================================================
+
+graph LR
+    ADMIN["ADMIN"]
+    MANAGER["MANAGER"]
+    EMPLOYEE["EMPLOYEE"]
+    NT(("NEUROTASK\nINTELLIGENT TASK\nMANAGEMENT\nSYSTEM"))
+
+    ADMIN -->|"Login Details"| NT
+    ADMIN -->|"Manage User Details"| NT
+    ADMIN -->|"Toggle AI Agent"| NT
+    ADMIN -->|"View Dashboard Request"| NT
+
+    NT -->|"Login Acknowledgement"| ADMIN
+    NT -->|"User Details"| ADMIN
+    NT -->|"AI Agent Status"| ADMIN
+    NT -->|"Dashboard Data"| ADMIN
+    NT -->|"Activity Logs"| ADMIN
+
+    MANAGER -->|"Login Details"| NT
+    MANAGER -->|"Registration Details"| NT
+    MANAGER -->|"Team Details"| NT
+    MANAGER -->|"Task Details"| NT
+    MANAGER -->|"View Dashboard Request"| NT
+
+    NT -->|"Login Acknowledgement"| MANAGER
+    NT -->|"Registration Acknowledgement"| MANAGER
+    NT -->|"Team Acknowledgement"| MANAGER
+    NT -->|"Task Acknowledgement"| MANAGER
+    NT -->|"Team Member Details"| MANAGER
+    NT -->|"Task Status Details"| MANAGER
+    NT -->|"AI Risk Alerts"| MANAGER
+    NT -->|"Dashboard Data"| MANAGER
+    NT -->|"Notification Details"| MANAGER
+
+    EMPLOYEE -->|"Login Details"| NT
+    EMPLOYEE -->|"Registration Details"| NT
+    EMPLOYEE -->|"Task Status Update"| NT
+    EMPLOYEE -->|"Comment Details"| NT
+    EMPLOYEE -->|"Reset Password Request"| NT
+    EMPLOYEE -->|"View Dashboard Request"| NT
+
+    NT -->|"Login Acknowledgement"| EMPLOYEE
+    NT -->|"Registration Acknowledgement"| EMPLOYEE
+    NT -->|"Task Details"| EMPLOYEE
+    NT -->|"Notification Details"| EMPLOYEE
+    NT -->|"Dashboard Data"| EMPLOYEE
+    NT -->|"Password Reset Acknowledgement"| EMPLOYEE
+
+
+====================================================
+3. DFD LEVEL 1 - DETAILED DIAGRAM
+====================================================
+
+graph TB
+    ADMIN["ADMIN"]
+    MANAGER["MANAGER"]
+    EMPLOYEE["EMPLOYEE"]
+
+    P1(("1.0\nRegistration"))
+    P2(("2.0\nLogin"))
+    P3(("3.0\nUser\nManagement"))
+    P4(("4.0\nTeam\nManagement"))
+    P5(("5.0\nTask\nManagement"))
+    P6(("6.0\nNotification"))
+    P7(("7.0\nAI\nAgents"))
+    P8(("8.0\nDashboard"))
+
+    DS1[("User_TBL")]
+    DS2[("Team_TBL")]
+    DS3[("Task_TBL")]
+    DS4[("Notification_TBL")]
+    DS5[("Comment_TBL")]
+
+    MANAGER -->|"Registration Details"| P1
+    EMPLOYEE -->|"Registration Details"| P1
+    P1 -->|"Registration Acknowledgement"| MANAGER
+    P1 -->|"Registration Acknowledgement"| EMPLOYEE
+    P1 -->|"Registration Details"| DS1
+    DS1 -->|"Registration Acknowledgement"| P1
+
+    ADMIN -->|"Login Details"| P2
+    MANAGER -->|"Login Details"| P2
+    EMPLOYEE -->|"Login Details"| P2
+    P2 -->|"Login Acknowledgement"| ADMIN
+    P2 -->|"Login Acknowledgement"| MANAGER
+    P2 -->|"Login Acknowledgement"| EMPLOYEE
+    P2 -->|"Login Details"| DS1
+    DS1 -->|"Login Acknowledgement"| P2
+
+    ADMIN -->|"Add User Details"| P3
+    ADMIN -->|"Delete User Request"| P3
+    P3 -->|"User Details"| ADMIN
+    P3 -->|"User Acknowledgement"| ADMIN
+    P3 -->|"Request User Details"| DS1
+    DS1 -->|"User Details"| P3
+    P3 -->|"Update Member Details"| DS2
+
+    MANAGER -->|"Create Team Details"| P4
+    MANAGER -->|"Delete Team Request"| P4
+    MANAGER -->|"Add Member Details"| P4
+    MANAGER -->|"Remove Member Request"| P4
+    P4 -->|"Team Acknowledgement"| MANAGER
+    P4 -->|"Team Member Details"| MANAGER
+    P4 -->|"Request Team Details"| DS2
+    DS2 -->|"Team Details"| P4
+    P4 -->|"Request User Details"| DS1
+    DS1 -->|"User Details"| P4
+
+    MANAGER -->|"Assign Task Details"| P5
+    MANAGER -->|"Delete Task Request"| P5
+    EMPLOYEE -->|"Task Status Update"| P5
+    EMPLOYEE -->|"Comment Details"| P5
+    P5 -->|"Task Acknowledgement"| MANAGER
+    P5 -->|"Task Details"| EMPLOYEE
+    P5 -->|"Task Status Details"| MANAGER
+    P5 -->|"Request Task Details"| DS3
+    DS3 -->|"Task Details"| P5
+    P5 -->|"Comment Details"| DS5
+    DS5 -->|"Comment Details"| P5
+    P5 -->|"Trigger Notification"| P6
+
+    P6 -->|"Notification Details"| EMPLOYEE
+    P6 -->|"Notification Details"| MANAGER
+    P6 -->|"Request Notification Details"| DS4
+    DS4 -->|"Notification Details"| P6
+
+    ADMIN -->|"Toggle AI Agent"| P7
+    P7 -->|"AI Agent Status"| ADMIN
+    P7 -->|"AI Risk Alerts"| MANAGER
+    P7 -->|"Read Task Data"| DS3
+    P7 -->|"Read Team Data"| DS2
+
+    ADMIN -->|"View Dashboard Request"| P8
+    MANAGER -->|"View Dashboard Request"| P8
+    EMPLOYEE -->|"View Dashboard Request"| P8
+    P8 -->|"Dashboard Data"| ADMIN
+    P8 -->|"Dashboard Data"| MANAGER
+    P8 -->|"Dashboard Data"| EMPLOYEE
+    P8 -->|"Read User Data"| DS1
+    P8 -->|"Read Team Data"| DS2
+    P8 -->|"Read Task Data"| DS3
+    P8 -->|"Read Notification Data"| DS4
+
+
+====================================================
+4. ERD (ENTITY RELATIONSHIP DIAGRAM)
+====================================================
+
+erDiagram
+    USER {
+        string id PK
+        string name
+        string email UK
+        string role "admin | manager | employee"
+        string password
+    }
+
+    TEAM {
+        string id PK
+        string name
+        string managerId FK
+    }
+
+    TASK {
+        string id PK
+        string title
+        string description
+        string status "pending | in-progress | completed"
+        string priority "low | medium | high"
+        string deadline
+        string assigneeId FK
+        string managerId FK
+        string createdAt
+    }
+
+    COMMENT {
+        string id PK
+        string taskId FK
+        string userId FK
+        string text
+        string timestamp
+    }
+
+    NOTIFICATION {
+        string id PK
+        string type
+        string title
+        string message
+        string targetUserId FK
+        string taskId FK
+        boolean read
+        string timestamp
+    }
+
+    TEAM_MEMBER {
+        string teamId FK
+        string userId FK
+    }
+
+    USER ||--o{ TEAM : "manages"
+    USER ||--o{ TASK : "assigned to"
+    USER ||--o{ TASK : "created by"
+    USER ||--o{ COMMENT : "writes"
+    USER ||--o{ NOTIFICATION : "receives"
+    TEAM ||--o{ TEAM_MEMBER : "has"
+    USER ||--o{ TEAM_MEMBER : "belongs to"
+    TASK ||--o{ COMMENT : "has"
+    TASK ||--o{ NOTIFICATION : "triggers"
+
+
+====================================================
+5. CLASS DIAGRAM
+====================================================
+
+classDiagram
+    class User {
+        +String id
+        +String name
+        +String email
+        +String role
+        +String password
+    }
+
+    class Team {
+        +String id
+        +String name
+        +String managerId
+        +String[] memberIds
+    }
+
+    class Task {
+        +String id
+        +String title
+        +String description
+        +String status
+        +String priority
+        +String deadline
+        +String assigneeId
+        +String managerId
+        +String createdAt
+        +Comment[] commentsList
+    }
+
+    class Comment {
+        +String id
+        +String userId
+        +String text
+        +String timestamp
+    }
+
+    class Notification {
+        +String id
+        +String type
+        +String title
+        +String message
+        +String targetUserId
+        +String taskId
+        +Boolean read
+        +String timestamp
+    }
+
+    class AppContext {
+        +User currentUser
+        +User[] users
+        +Team[] teams
+        +Task[] tasks
+        +Notification[] notifications
+        +login(email, role) User
+        +register(name, email, role) User
+        +logout() void
+        +addUserByAdmin(userData) User
+        +deleteUser(userId) void
+        +createTeam(managerId, name, memberIds) Team
+        +updateTeam(teamId, updates) void
+        +deleteTeam(teamId) void
+        +addTask(taskData) Task
+        +updateTask(taskId, updates) void
+        +deleteTask(taskId) void
+        +addTaskComment(taskId, comment) void
+        +addNotification(notification) Notification
+        +markNotificationRead(notifId) void
+        +markAllNotificationsRead() void
+    }
+
+    AppContext --> User : manages
+    AppContext --> Team : manages
+    AppContext --> Task : manages
+    AppContext --> Notification : manages
+    Team --> User : "managerId references"
+    Team --> User : "memberIds references"
+    Task --> User : "assigneeId references"
+    Task --> User : "managerId references"
+    Task --> Comment : contains
+    Notification --> User : "targetUserId references"
+    Notification --> Task : "taskId references"
+
+
+====================================================
+6. ACTIVITY DIAGRAM - TASK ASSIGNMENT FLOW
+====================================================
+
+flowchart TD
+    A([Start]) --> B[Manager Logs In]
+    B --> C[View Manager Dashboard]
+    C --> D{Has Team?}
+    D -->|No| E[Go to Team Management]
+    E --> F[Create New Team]
+    F --> G[Add Members to Team]
+    G --> H[Team Created Successfully]
+    H --> C
+    D -->|Yes| I[Navigate to Task Board]
+    I --> J[Click Assign New Task]
+    J --> K[Fill Task Form]
+    K --> L["Enter Title, Description"]
+    L --> M["Select Priority, Deadline"]
+    M --> N[Select Assignee from Team]
+    N --> O[Submit Task]
+    O --> P[Task Saved to Context]
+    P --> Q[Notification Auto-Created for Employee]
+    Q --> R([End - Task Assigned])
+
+    R --> S[Employee Logs In]
+    S --> T[Employee Sees Notification]
+    T --> U[Employee Views Task]
+    U --> V[Mark Task In-Progress]
+    V --> W[Add Comments]
+    W --> X[Mark Task Completed]
+    X --> Y[Manager Sees Updated Stats]
+    Y --> Z([End - Task Completed])
+
+
+====================================================
+7. ACTIVITY DIAGRAM - FORGOT PASSWORD FLOW
+====================================================
+
+flowchart TD
+    A([Start]) --> B[User on Login Page]
+    B --> C["Click 'Forgot Password?'"]
+    C --> D[Modal Opens - Step 1]
+    D --> E[Enter Email Address]
+    E --> F{Email Valid?}
+    F -->|No| G[Show Error Message]
+    G --> E
+    F -->|Yes| H[Proceed to Step 2]
+    H --> I[Enter New Password]
+    I --> J[Confirm New Password]
+    J --> K{Password >= 6 chars AND Passwords Match?}
+    K -->|No| L[Show Validation Error]
+    L --> I
+    K -->|Yes| M[Password Reset Successfully]
+    M --> N[Show Success Screen - Step 3]
+    N --> O["Click 'Back to Login'"]
+    O --> P[Modal Closes]
+    P --> Q([End - Return to Login])
+
+
+====================================================
+8. ACTIVITY DIAGRAM - USER REGISTRATION FLOW
+====================================================
+
+flowchart TD
+    A([Start]) --> B[User on Login Page]
+    B --> C["Click 'Sign Up'"]
+    C --> D[Navigate to Register Page]
+    D --> E[Enter Full Name]
+    E --> F[Enter Email]
+    F --> G[Enter Password]
+    G --> H[Select Role - Manager/Employee]
+    H --> I[Click Register]
+    I --> J{All Fields Valid?}
+    J -->|No| K[Show Error Message]
+    K --> E
+    J -->|Yes| L{Email Already Exists?}
+    L -->|Yes| M[Show Duplicate Error]
+    M --> F
+    L -->|No| N[User Created in Context]
+    N --> O[Auto Login]
+    O --> P[Redirect to Role Dashboard]
+    P --> Q([End - Registration Complete])
